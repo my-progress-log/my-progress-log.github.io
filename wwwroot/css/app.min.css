@@ -574,10 +574,6 @@ video {
   inset: 0px;
 }
 
-.bottom-1 {
-  bottom: 0.25rem;
-}
-
 .bottom-24 {
   bottom: 6rem;
 }
@@ -610,18 +606,6 @@ video {
   z-index: 2000;
 }
 
-.z-\[500\] {
-  z-index: 500;
-}
-
-.z-\[510\] {
-  z-index: 510;
-}
-
-.z-\[511\] {
-  z-index: 511;
-}
-
 .m-0 {
   margin: 0px;
 }
@@ -630,19 +614,14 @@ video {
   margin: 0.5rem;
 }
 
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
+.mx-3 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
 }
 
 .my-0 {
   margin-top: 0px;
   margin-bottom: 0px;
-}
-
-.my-1 {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
 }
 
 .my-3 {
@@ -671,8 +650,12 @@ video {
   margin-bottom: 0.75rem;
 }
 
-.ml-1 {
-  margin-left: 0.25rem;
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.mr-1\.5 {
+  margin-right: 0.375rem;
 }
 
 .mr-2 {
@@ -707,6 +690,10 @@ video {
   display: flex;
 }
 
+.grid {
+  display: grid;
+}
+
 .hidden {
   display: none;
 }
@@ -723,16 +710,16 @@ video {
   height: 8rem;
 }
 
+.h-4 {
+  height: 1rem;
+}
+
 .h-5 {
   height: 1.25rem;
 }
 
 .h-6 {
   height: 1.5rem;
-}
-
-.h-7 {
-  height: 1.75rem;
 }
 
 .h-8 {
@@ -861,6 +848,18 @@ video {
   scroll-snap-align: start;
 }
 
+.grid-flow-col {
+  grid-auto-flow: column;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-rows-4 {
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+}
+
 .flex-row {
   flex-direction: row;
 }
@@ -901,6 +900,10 @@ video {
   justify-content: space-between;
 }
 
+.gap-4 {
+  gap: 1rem;
+}
+
 .gap-x-1 {
   -moz-column-gap: 0.25rem;
        column-gap: 0.25rem;
@@ -921,6 +924,18 @@ video {
 
 .gap-y-12 {
   row-gap: 3rem;
+}
+
+.space-x-1 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.25rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.375rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.375rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .space-x-3 > :not([hidden]) ~ :not([hidden]) {
@@ -979,12 +994,16 @@ video {
   border-width: 1px;
 }
 
-.border-b-\[0\.666667px\] {
-  border-bottom-width: 0.666667px;
+.border-b {
+  border-bottom-width: 1px;
 }
 
 .border-t {
   border-top-width: 1px;
+}
+
+.border-dashed {
+  border-style: dashed;
 }
 
 .border-\[rgb\(145\2c 145\2c 145\)\] {
@@ -995,11 +1014,6 @@ video {
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
-}
-
-.border-b-\[rgb\(23\2c 25\2c 26\)\] {
-  --tw-border-opacity: 1;
-  border-bottom-color: rgb(23 25 26 / var(--tw-border-opacity));
 }
 
 .bg-\[\#ffffff1a\] {
@@ -1034,10 +1048,6 @@ video {
   background-color: transparent;
 }
 
-.bg-none {
-  background-image: none;
-}
-
 .p-0 {
   padding: 0px;
 }
@@ -1064,11 +1074,6 @@ video {
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-}
-
-.py-1\.5 {
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
 }
 
 .py-2 {
@@ -1161,6 +1166,11 @@ video {
   line-height: 2.5rem;
 }
 
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
+}
+
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -1195,10 +1205,6 @@ video {
 
 .leading-6 {
   line-height: 1.5rem;
-}
-
-.leading-7 {
-  line-height: 1.75rem;
 }
 
 .leading-8 {
@@ -1333,8 +1339,8 @@ video {
 
 :root {
   --vh: '0px';
-  --theme-color: #17191a;
-  --theme-bg: #f2f2f2;
+  --theme-color: rgb(19, 19, 19);
+  --theme-bg: rgb(210,210,210);
 }
 
 html {
@@ -1356,7 +1362,7 @@ html, body, main, .page {
 }
 
 h1, h2, h3, h4, h5, h6, p, a, span, input, select, textarea {
-  font-family: "ABC Monument Grotesk Regular", sans-serif;
+  font-family: "EB Trainer Grotesk Book", sans-serif;
 }
 
 /* 
@@ -1764,6 +1770,20 @@ html.lenis, html.lenis body {
   font-family: "ABC Monument Grotesk Regular", sans-serif;
 }
 
+@font-face {
+  font-family: "EB Trainer Grotesk Book";
+
+  src: url("../fonts/EBTrainerGroteskTrial-Book.woff2");
+
+  font-weight: 400;
+
+  font-style: normal;
+}
+
+.eb-trainer-grotesk-book {
+  font-family: "EB Trainer Grotesk Book", sans-serif;
+}
+
 article h1, article h2, article h3, article h4, article h5, article h6,
     article p, article a, article ul, article ol, article li, article blockquote {
   letter-spacing: -0.035em;
@@ -1775,11 +1795,6 @@ article h1, article h2, article h3, article h4, article h5, article h6,
 article h1, article h2, article h3, article h4, article h5, article h6 {
   margin-top: 1.75rem;
   margin-bottom: 0.75rem;
-}
-
-article p, article p > code, article a, article ul, article ol, article li, article blockquote {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
 }
 
 article h1 {
@@ -1822,6 +1837,8 @@ article h5 {
 article ul {
   list-style-type: disc;
   padding-left: 1rem;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 article ol {
@@ -1876,16 +1893,6 @@ article a > i {
   vertical-align: middle;
 }
 
-article ul > li::marker, article ol > li::marker {
-  --tw-text-opacity: 1;
-  color: rgb(168 162 158 / var(--tw-text-opacity));
-}
-
-article ul > li:is(.dark *)::marker, article ol > li:is(.dark *)::marker {
-  --tw-text-opacity: 1;
-  color: rgb(87 83 78 / var(--tw-text-opacity));
-}
-
 article ul > li, article ol > li {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
@@ -1894,6 +1901,12 @@ article ul > li, article ol > li {
 article ul > li:is(.dark *), article ol > li:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+article ul > li, article ol > li {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  line-height: 1;
 }
 
 article p > a, article ul > li > a, article ol > li > a {
@@ -1961,15 +1974,6 @@ article p > a > i, article ul > li > a > i, article ol > li > a {
 .dark\:text-white:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.dark\:invert:is(.dark *) {
-  --tw-invert: invert(100%);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-.dark\:filter-none:is(.dark *) {
-  filter: none;
 }
 
 .before\:dark\:text-white:is(.dark *)::before {

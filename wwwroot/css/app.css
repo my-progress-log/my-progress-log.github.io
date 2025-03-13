@@ -26,8 +26,9 @@
 
 :root {
     --vh: '0px';
-    --theme-color: #17191a;
-    --theme-bg: #f2f2f2;
+    --theme-color: rgb(19, 19, 19);
+    --theme-bg: rgb(210,210,210);
+    font-size: 14px;
 }
 
 html {
@@ -49,7 +50,7 @@ html, body, main, .page {
 }
 
 h1, h2, h3, h4, h5, h6, p, a, span, input, select, textarea {
-    @apply abc-monument-grotesk-regular;
+    @apply eb-trainer-grotesk-book;
 }
 
 /* 
@@ -421,6 +422,18 @@ html.lenis, html.lenis body {
         font-family: "ABC Monument Grotesk Regular", sans-serif;
     }
 
+    @font-face {
+        font-family: "EB Trainer Grotesk Book";
+        src: url("../fonts/EBTrainerGroteskTrial-Book.woff2");
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .eb-trainer-grotesk-book {
+        font-family: "EB Trainer Grotesk Book", sans-serif;
+    }
+
+
 
     article h1, article h2, article h3, article h4, article h5, article h6,
     article p, article a, article ul, article ol, article li, article blockquote {
@@ -432,10 +445,6 @@ html.lenis, html.lenis body {
     article h1, article h2, article h3, article h4, article h5, article h6 {
         @apply mt-7;
         @apply mb-3;
-    }
-
-    article p, article p > code, article a, article ul, article ol, article li, article blockquote {
-        @apply text-lg;
     }
 
     article h1 {
@@ -465,6 +474,7 @@ html.lenis, html.lenis body {
     article ul {
         @apply list-disc;
         @apply pl-4;
+        @apply my-0;
     }
 
     article ol {
@@ -499,14 +509,11 @@ html.lenis, html.lenis body {
         @apply align-middle;
     }
 
-    article ul > li::marker, article ol > li::marker {
-        @apply text-stone-400;
-        @apply dark:text-stone-600;
-    }
-
     article ul > li, article ol > li {
         @apply text-black;
         @apply dark:text-white;
+        @apply my-0;
+        @apply leading-none;
     }
 
     article p > a, article ul > li > a, article ol > li > a {

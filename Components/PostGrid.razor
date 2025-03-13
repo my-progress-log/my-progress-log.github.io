@@ -7,16 +7,26 @@
 @using CustomLinkExtension = BlazorPortfolio.Helpers.CustomLinkExtension
 
 
-<div>
+<div class="grid grid-flow-col grid-rows-4 grid-cols-3 gap-4 w-full">
 @foreach (var group in _groupedPosts) {
 
-    <h1>@group.Key</h1>
-    @foreach (var post in group.Value) {
-        <div class="post">
-            <h3>@post.DateAsUriString</h3>
-            <article>@post.Content</article>
-        </div>
-    }
+    <div>
+        <span class="text-3xl">@group.Key</span>
+        @foreach (var post in group.Value) {
+            <div class="post">
+                <div class="flex flex-row justify-end">
+                    <span><b>@(post.DateAsDateTime.DayOfWeek + " " + post.Date)</b></span>
+                    <span class="grow border-b border-dashed border-black mx-3"></span>
+                    <span class="space-x-1.5">
+                        <span><img src="media/satisfaction_icon.svg" class="h-4 inline-block mr-1.5"/><b>@post.Satisfaction</b></span>
+                        <span><img src="media/hours_icon.svg" class="h-4 inline-block mr-1.5"/><b>@(post.Hours + "h")</b></span>
+                    </span>
+                </div>
+
+                <article>@post.Content</article>
+            </div>
+        }
+    </div>
 
 }
 </div>
