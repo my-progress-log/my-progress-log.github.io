@@ -1,0 +1,519 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./typography.css";
+@import "./markdown.css";
+
+
+
+@keyframes pulse-out {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1.75);
+      opacity: 0;
+    }
+  }
+  
+  .pulse-out {
+    animation: pulse-out 2s infinite;
+  }
+
+/* START General */
+
+:root {
+    --vh: '0px';
+    --theme-color: #17191a;
+    --theme-bg: #f2f2f2;
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-size: 15px;
+}
+ 
+body {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+html, body, main, .page {
+    background: var(--theme-bg);
+    color: var(--theme-color);
+}
+
+h1, h2, h3, h4, h5, h6, p, a, span, input, select, textarea {
+    @apply abc-monument-grotesk-regular;
+}
+
+/* 
+Fix to prevent FocusOnNavigate in App.razor from adding outline to the first h1 on a page
+https://www.reddit.com/r/Blazor/comments/xl09d8/blazor_h1_element_is_focused_on_startup_for_no/
+*/
+h1:focus {
+    outline: none;
+}
+
+section, footer {
+    @apply px-3;
+    @apply py-12;
+    @apply mb-16;
+    background: var(--theme-bg);
+    color: var(--theme-color);
+}
+
+section.dark, footer.dark {
+    background: #000;
+    color: var(--theme-bg);
+}
+
+.text-default {
+    color: var(--theme-color);
+}
+
+.bg-default {
+    background: var(--theme-bg);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+.scrollbar-none {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.leading-tighter {
+    line-height: 1.05;
+}
+
+.h-fullvh {
+    height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+    height: calc(var(--vh, 1vh) * 100);
+}
+
+.min-h-fullvh {
+    min-height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
+.mt-1\/4vh {
+    margin-top: calc(calc(100vh - 4.75rem) / 4); /* Fallback for browsers that do not support Custom Properties */
+    margin-top: calc(calc(calc(var(--vh, 1vh) * 100) - 4.75rem) / 4);
+}
+
+/* END General */
+
+/* START MainLayout */
+
+.content { /* TODO  REMOVE */
+    position: relative;
+    --before-y-percent: 100%;
+}
+
+.content::before { /* TODO  REMOVE */
+    transform: translateY(var(--before-y-percent));
+    content: '';
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    @apply dark:bg-black;
+    @apply bg-white;
+    z-index: -1;
+}
+
+.content-percentage::after { /* TODO REMOVE? */
+    content: calc(var(--blazor-load-percentage) * 1);
+}
+
+/* END MainLayout */
+
+/* START Index */
+/* END Index */
+
+/* START Contact */
+
+input, textarea {
+    @apply text-black;
+    @apply p-3;
+    @apply w-full;
+    @apply border;
+    @apply border-[rgb(145,145,145)];
+    @apply bg-white;
+    @apply appearance-none;
+}
+
+input::placeholder, textarea::placeholder {
+    @apply text-[rgb(145,145,145)];
+}
+
+select {
+    @apply appearance-none;
+}
+
+/* END Contact */
+
+/* START Footer */
+
+.marquee {
+    white-space: nowrap;
+    display: block;
+}
+
+.scroll {
+    animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(calc(-100% - 1rem));
+    }
+}
+
+@keyframes slide { /* TODO REMOVE? */
+    0% {
+        transform: translateX(-100%);
+    }
+    20% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(100%); /* Hold position at the end */
+    }
+}
+
+/* END Footer */
+
+/* START Navigation */
+
+.line-animation {
+    animation: slide 5s ease-in-out infinite;
+    width: 100%;
+    height: 0.666667px;
+    background-color: rgb(23,25,26);
+}
+
+.ani-box {
+    position: relative;
+    --before-y-percent: 0%;
+    overflow: hidden;
+}
+
+.ani-box::before {
+    transform: translateY(var(--before-y-percent));
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    @apply dark:bg-black;
+    z-index: 1;
+}
+
+/* END Navigation */
+
+/* START Loader */
+
+.linear-progress {
+    background: rgb(145,145,145);
+    height: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.linear-progress:after {
+    height: 100%;
+    content: '';
+    position: absolute;
+    inset: 0;
+    @apply bg-white;
+    scale: var(--blazor-load-percentage, 0%) 100%;
+    transform-origin: left top;
+    transition: scale ease-out 0.5s;
+}
+
+.wrapper {
+    max-width: 500px;
+    width: 100%;
+    overflow: hidden;
+}
+
+/*
+.countertest:after {
+    content: var(--blazor-load-percentage-text);
+}
+*/
+
+/* END Loader */
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+/* BEGIN GSAP */
+
+.gsap-lines {
+    @apply relative;
+    @apply block;
+}
+
+.gsap-line {
+    @apply overflow-hidden;
+}
+
+.gsap-line-inner {
+    @apply relative;
+    @apply block;
+}
+
+
+/* BEGIN Lenis */
+
+html.lenis, html.lenis body {
+    height: auto;
+  }
+  
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
+  }
+
+/* END Lenis */
+
+
+
+
+
+/* ANIMATION TIMINGS */
+
+@keyframes bg-pos-animation {
+    0%,
+    100% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+}
+
+@keyframes bg-blur-animation {
+    0%,
+    100% {
+         filter: blur(7px);
+    }
+    50% {
+        filter: blur(4px);
+    }
+}
+
+@keyframes text-blur-animation {
+    0% {
+         filter: blur(1px);
+    }
+    50% {
+         filter: blur(0px);
+    }
+    100% {
+         filter: blur(1px);
+    }
+}
+
+@keyframes tribal-animation {
+    0% {
+        filter: brightness(200%);
+    }
+    50% {
+        filter: brightness(150%);
+    }
+    100% {
+        filter: brightness(200%);
+    }
+}
+
+@keyframes wrapper-sat-animation {
+    0% {
+         filter: saturate(2);
+    }
+    100% {
+         filter: saturate(4);
+    }
+}
+
+
+
+    /* Thinner paragraph font: FK Grotesk Neue Regular (dub) */
+
+    @font-face {
+        font-family: "FK Grotesk Neue Regular Dub";
+        src: url("../fonts/FK Grotesk Neue Regular Dub.woff2");
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .fk-grotesk-neue-regular-dub {
+        font-family: "FK Grotesk Neue Regular Dub", sans-serif;
+    }
+
+    /* Accent header font: Inferi Normal Italic */
+
+    @font-face {
+        font-family: "Inferi Regular Italic";
+        src: url("../fonts/Inferi Regular Italic.otf");
+        font-weight: 400;
+        font-style: italic;
+    }
+
+    .inferi-regular-italic {
+        font-family: "Inferi Regular Italic", serif;
+    }
+
+    /* Main font: ABC Monument Grotesk*/
+
+    @font-face {
+        font-family: "ABC Monument Grotesk Regular";
+        src: url("../fonts/ABC Monument Grotesk Regular.woff2");
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .abc-monument-grotesk-regular {
+        font-family: "ABC Monument Grotesk Regular", sans-serif;
+    }
+
+
+    article h1, article h2, article h3, article h4, article h5, article h6,
+    article p, article a, article ul, article ol, article li, article blockquote {
+        @apply tracking-[-0.035em];
+        @apply leading-none;
+        @apply my-3;
+    }
+
+    article h1, article h2, article h3, article h4, article h5, article h6 {
+        @apply mt-7;
+        @apply mb-3;
+    }
+
+    article p, article p > code, article a, article ul, article ol, article li, article blockquote {
+        @apply text-lg;
+    }
+
+    article h1 {
+        @apply text-4xl;
+    }
+
+    article h2 {
+        @apply text-3xl;
+        @apply border-b-2;
+        @apply border-stone-300;
+        @apply dark:border-stone-600;
+        @apply pb-2;
+    }
+
+    article h3 {
+        @apply text-2xl;
+    }
+
+    article h4 {
+        @apply text-xl;
+    }
+
+    article h5 {
+        @apply text-lg;
+    }
+
+    article ul {
+        @apply list-disc;
+        @apply pl-4;
+    }
+
+    article ol {
+        @apply list-decimal;
+        @apply pl-4;
+    }
+
+    article code {
+        @apply bg-stone-800;
+        @apply text-stone-300;
+        @apply rounded;
+        @apply px-1;
+    }
+
+    article pre > code {
+        @apply p-3;
+        @apply block;
+        @apply w-full;
+    }
+
+    article a {
+        @apply text-[#1e62f2];
+        @apply dark:text-[#437cf4];
+        @apply underline;
+        @apply rounded;
+        @apply px-1.5;
+    }
+
+    article a > i {
+        @apply text-stone-600;
+        @apply dark:text-stone-300;
+        @apply align-middle;
+    }
+
+    article ul > li::marker, article ol > li::marker {
+        @apply text-stone-400;
+        @apply dark:text-stone-600;
+    }
+
+    article ul > li, article ol > li {
+        @apply text-black;
+        @apply dark:text-white;
+    }
+
+    article p > a, article ul > li > a, article ol > li > a {
+        @apply px-1;
+    }
+
+    article p > a > i, article ul > li > a > i, article ol > li > a {
+        @apply text-sm;
+        @apply ml-1;
+    }

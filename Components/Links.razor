@@ -1,0 +1,21 @@
+@inject NavigationManager NavigationManager
+
+<div class="w-full flex flex-col gap-y-12">
+    <div class="flex flex-row w-full gap-x-2">
+        <ul class="flex-1 w-1/2 gap-y-0 pl-5">
+            <li class="relative before:content-['■'] before:absolute before:-left-5 before:text-black before:dark:text-white"><a class="tracking-[-0.035em] leading-none">Westhoven 7</a></li>
+            <li class="relative before:content-['■'] before:absolute before:-left-5 before:text-black before:dark:text-white"><a class="tracking-[-0.035em] leading-none">1234AB, Roermond</a></li>
+        </ul>
+        <ul class="flex-1 w-1/2 gap-y-0 pl-5">
+            <li class="relative before:content-['■'] before:absolute before:-left-5 before:text-black before:dark:text-white"><a class="tracking-[-0.035em] leading-none">hello@vemo.studio</a></li>
+            <li class="relative before:content-['■'] before:absolute before:-left-5 before:text-black before:dark:text-white"><a class="tracking-[-0.035em] leading-none">+31 6 12345678</a></li>
+        </ul>
+    </div>
+</div>
+
+@code {
+    private string Sheep = "_dgYn#hX]ddacZZhiZgh5gj#ca";
+    private string HappySheep {
+        get => new string(Sheep.Select(c => (char)(c + 11)).ToArray());
+    }
+}

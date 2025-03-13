@@ -1,0 +1,94 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@using Components
+@using System.Text.Json
+@using Pages
+@inject IJSRuntime JS
+
+<main class="@(!DarkMode ? "dark" : "")">
+
+    <div class="min-h-[100vh] wrapper w-full max-w-[500px] mx-auto">
+
+        <div class="bg-none z-[500] relative top-0 w-full max-w-[500px]">
+            <div id="navbar" class="border-b-[rgb(23,25,26)] border-b-[0.666667px] navbar bg-default gsap-animate-transition relative z-[510] flex items-center px-3 py-1">
+                <div class="inline-block"><div class="ani-box gsap-animate-transition"><img src="media/Webface1name.svg" @onclick="@(() => NavigateToPage("/"))" class=" dark:filter-none h-7"/></div></div>
+                <span class="grow"></span>
+                @*<div @onclick="@(()=> DarkMode = !DarkMode)" class="@(ShowMenu ? "" : "hidden") mr-3 text-xl rounded-full text-black dark:text-white grid cursor-pointer"><span class="block place-self-center @(DarkMode ? "iconoir-sun-light" : "iconoir-half-moon")"</span></div>*@
+                <div class="select-none z-[511] inline-block">
+                    <span @onclick="@(() => NavigateToPage(ContactUri))" class="ani-box gsap-animate-transition justify-end flex flex-row cursor-pointer tracking-[-0.035em] leading-none py-1.5">
+                        <span class="relative overflow-hidden">
+                            <span class="h-7 leading-7 align-middle inline-block">@(ContactUri == "/contact" ? "Let's Connect" : "Close")</span>
+                            @if(ContactUri == "/contact") {
+                                <div class="absolute bottom-1 left-0 line-animation"></div>
+                            }
+                        </span>
+                        <img src="@(ContactUri == "/contact" ? "media/conversation_icon.svg" : "media/close_icon.svg")" class="dark:invert ml-1 h-5 my-1"/>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content gsap-animate-transition">
+            @Body
+        </div>
+
+    </div>
+</main>
+
+
+@code {
+   [Inject]
+   private HttpClient HttpClient { get; set; }
+    private int PostCount { get; set; } = 0;
+    private bool DarkMode { get; set; } = true;
+private string ContactUri
+{
+    get
+    {
+        // Check if the current URI ends with "/contact" (case-insensitive)
+        return NavigationManager.Uri.TrimEnd('/').EndsWith("/contact", StringComparison.OrdinalIgnoreCase) 
+            ? "/" 
+            : "/contact";
+    }
+}
+
+    private ValueTask PreventScrolling(bool val) {
+        return JS.InvokeVoidAsync("preventScrolling", val);
+    }
+
+    private async Task OpenMenuAnimate() {
+        await JS.InvokeVoidAsync("openMenu");
+    }
+
+    private async Task CloseMenuAnimate() {
+        await JS.InvokeVoidAsync("closeMenu");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            // Prevent showing page before fading in
+            await JS.InvokeVoidAsync("pageLoaded");
+            await JS.InvokeVoidAsync("animateNavbar");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async void NavigateToPage(string page) {
+        var uri = Path.Combine(NavigationManager.BaseUri, page);
+
+        if (!(uri == NavigationManager.Uri)) {
+            await JS.InvokeAsync<object>("pageFadeOut");
+            await JS.InvokeVoidAsync("pageLoaded");
+            NavigationManager.NavigateTo(uri);
+        }
+    }
+
+   protected override async Task OnInitializedAsync()
+   {
+        var jsonContent = await HttpClient.GetStringAsync("posts/posts.json");
+        var posts = JsonSerializer.Deserialize<List<Models.Post>>(jsonContent);
+        if (posts != null)
+                PostCount = posts.Count;
+   }
+}

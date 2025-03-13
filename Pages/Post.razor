@@ -1,0 +1,153 @@
+﻿@* This captures everything after /post/ instead of just one string *@
+@page "/blog/post/{*slug}" 
+
+@using Markdig;
+@using System.Net.Http;
+@using System.Net.Http.Json;
+@using Markdig.Syntax;
+@using System.IO
+@using MarkdownHelper = BlazorPortfolio.Helpers.MarkdownHelper
+@using CustomLinkExtension = BlazorPortfolio.Helpers.CustomLinkExtension
+@using BlazorPortfolio.Models
+@using System.Text.Json
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+<PageTitle>@Title</PageTitle>
+
+<div class="page w-full px-3 pt-[4.9rem] pb-3 select-none">
+    
+    @*<div class="content-[''] w-full h-32 bg-[hsla(26,28%,95%,.5)] rounded"></div>*@
+    <h2 class="text-sm p-0 m-0 mt-3 mb-2">@Date</h2>
+    <h1 class="text-3xl tracking-tighter uppercase p-0 m-0 mt-3 mb-3 leading-none">@Title</h1>
+    @foreach (string tag in Tags) {
+        <div class="badge align-middle text-xs bg-transparent rounded-full text-black dark:text-white border border-black dark:border-white mr-2 uppercase">@tag</div>
+    }
+
+    <article class="py-4 text-black dark:text-white">@HtmlContent</article>
+
+        @if (PreviousPost != null) {
+            <div class="post-border gsap-animate-transition w-full border-t border-black dark:border-white"></div>
+            <div class="post gsap-animate-transition cursor-pointer py-3 flex flex-row" @onclick="@(() => NavigateToPost(PreviousPost))">
+               <div class="pr-3">
+                  <span class="leading-none">←</span>
+               </div>
+               <div class="grow flex flex-col">
+                  <div class="flex flex-row mt-3">
+                     <div class="basis-1/2"><span>@PreviousPost.DateAsUriString</span></div>
+                     <div class="basis-1/2 text-end"><span class="">5 min read →</span></div>
+                  </div>
+               </div>
+            </div>
+            <div class="post-border gsap-animate-transition w-full border-t border-black dark:border-white"></div>
+        }
+
+        @if (NextPost != null) {
+            <div class="post-border gsap-animate-transition w-full border-t border-black dark:border-white"></div>
+            <div class="post gsap-animate-transition cursor-pointer py-3 flex flex-row" @onclick="@(() => NavigateToPost(NextPost))">
+               <div class="pr-3">
+                  <span class="leading-none">→</span>
+               </div>
+               <div class="grow flex flex-col">
+                  <div class="flex flex-row mt-3">
+                     <div class="basis-1/2"><span>@NextPost.DateAsUriString</span></div>
+                     <div class="basis-1/2 text-end"><span class="">5 min read →</span></div>
+                  </div>
+               </div>
+            </div>
+            <div class="post-border gsap-animate-transition w-full border-t border-black dark:border-white"></div>
+        }
+</div>
+
+
+@code {
+    // TODO: find out why httpclient gives nullable warning
+    [Inject]
+    private HttpClient HttpClient { get; set; }
+
+    [Parameter]
+    public string? Slug { get; set; }
+    public MarkupString HtmlContent { get; set; }
+    public string Title { get; set; } = "";
+    public string Date { get; set; } = "";
+    public IEnumerable<string> Tags { get; set; } = new string[] { };
+    private Models.Post? PreviousPost { get; set; }
+    private Models.Post? NextPost { get; set; }
+
+    private bool reload = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+      await LoadData();
+      await base.OnInitializedAsync();
+    }
+
+    private async Task LoadData() {
+        if (!string.IsNullOrEmpty(Slug))
+        {
+            var trimmedSlug = Slug.TrimEnd('/');
+            trimmedSlug = trimmedSlug.Contains('/') ? trimmedSlug.Substring(trimmedSlug.LastIndexOf(@"/")) : trimmedSlug;
+            var fileName = trimmedSlug.Length > 1 && trimmedSlug[0] == '/' ? trimmedSlug.Substring(1) : trimmedSlug;
+
+            var jsonContent = await HttpClient.GetStringAsync("posts/posts.json");
+            var posts = JsonSerializer.Deserialize<List<Models.Post>>(jsonContent);
+            if (posts != null) {
+                var post = posts.FirstOrDefault(p => p.Id == fileName);
+                if (post != null) {
+                    Date = post.Date;
+                    var contentStartIndex = post.ContentStartIndex;
+
+                    var uri = Path.Combine("posts", post.Id + ".md");
+                    var markdownContent = await HttpClient.GetStringAsync(uri);
+                    var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Use<CustomLinkExtension>().Build();
+                    HtmlContent = new MarkupString(Markdown.ToHtml(markdownContent.Substring(contentStartIndex), pipeline));
+
+                    var orderedPosts = posts.OrderBy(p => p.DateAsDateTime).Select((post, i) => ( post, i )).ToList();
+                    var currentIndex = orderedPosts.FindIndex(p => p.post.Id == post.Id);
+                    
+                    if (currentIndex > 0)
+                        NextPost = orderedPosts[currentIndex - 1].post;
+                    else
+                        NextPost = null;
+
+                    if (currentIndex < orderedPosts.Count - 1)
+                        PreviousPost = orderedPosts[currentIndex + 1].post;
+                     else
+                        PreviousPost = null;
+                }
+            }
+        }
+    }
+
+   protected override async Task OnAfterRenderAsync(bool firstRender)
+   {
+      if (reload) {
+         await LoadData();
+         reload = false;
+         StateHasChanged();
+         //await JS.InvokeVoidAsync("pageLoaded");
+         await JS.InvokeVoidAsync("pageFadeIn");
+      }
+
+      if (firstRender) {
+        await JS.InvokeVoidAsync("pageLoaded");
+        await JS.InvokeVoidAsync("pageFadeIn");
+      }
+
+      await base.OnAfterRenderAsync(firstRender);
+   }
+
+   private async Task NavigateToPost(Models.Post post)
+   {
+      //await JS.InvokeVoidAsync("beginTransitionBox", e.ClientX, e.ClientY);
+      var baseUri = NavigationManager.BaseUri;
+      var uri = Path.Combine(baseUri, "blog", "post", post.DateAsUriString, post.Id.Substring(post.Id.LastIndexOf('/') + 1));
+      
+      if (!(uri == NavigationManager.Uri)) {
+         await JS.InvokeAsync<object>("pageFadeOut");
+         await JS.InvokeVoidAsync("pageLoaded");
+         NavigationManager.NavigateTo(uri);
+         reload = true;
+      }
+   }
+}

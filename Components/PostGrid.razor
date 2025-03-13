@@ -1,0 +1,54 @@
+@using BlazorPortfolio.Models;
+@inject IJSRuntime JS;
+@inject HttpClient HttpClient;
+@inject NavigationManager NavigationManager;
+@using Markdig;
+@using MarkdownHelper = BlazorPortfolio.Helpers.MarkdownHelper
+@using CustomLinkExtension = BlazorPortfolio.Helpers.CustomLinkExtension
+
+
+<div>
+@foreach (var group in _groupedPosts) {
+
+    <h1>@group.Key</h1>
+    @foreach (var post in group.Value) {
+        <div class="post">
+            <h3>@post.DateAsUriString</h3>
+            <article>@post.Content</article>
+        </div>
+    }
+
+}
+</div>
+
+@code {
+    [Parameter]
+    public List<Post> Posts { get; set; } = new();
+    private Dictionary<string, List<Post>> _groupedPosts = new();
+    private bool _contentLoaded = false;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Posts.Count > 0 && !_contentLoaded) {
+            var posts = await Task.WhenAll(Posts.Select(p => AddContent(p)));
+            _contentLoaded = true;
+            _groupedPosts = posts
+                .GroupBy(p => p.DateAsDateTime.ToString("MMMM yyyy")) // Group by "Month Year"
+                .ToDictionary(g => g.Key, g => g.OrderBy(a => a.DateAsDateTime).ToList());
+        }
+        StateHasChanged();
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task<Post> AddContent(Post post)
+    {
+        var uri = Path.Combine("posts", post.Id + ".md");
+        Console.WriteLine(post.DateAsDateTime);
+        Console.WriteLine(post.DateAsUriString);
+        Console.WriteLine($"Fetching content from: {new Uri(HttpClient.BaseAddress, uri)}");
+        var markdownContent = await HttpClient.GetStringAsync(uri);
+        var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Use<CustomLinkExtension>().Build();
+        post.Content = new MarkupString(Markdown.ToHtml(markdownContent.Substring(post.ContentStartIndex), pipeline));
+        return post;
+    }
+}

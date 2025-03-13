@@ -1,0 +1,43 @@
+@page "/"
+@using System.Text.Json
+@using BlazorPortfolio.Models;
+@using BlazorPortfolio.Components;
+@using System.Globalization
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+@inject HttpClient HttpClient;
+<PageTitle>my-progress-log</PageTitle>
+
+<div class="page w-full relative">
+   <PostGrid Posts="Posts" />
+</div>
+
+@code {
+   private List<Models.Post> Posts { get; set; } = new();
+
+   protected override async Task OnAfterRenderAsync(bool firstRender)
+   {
+      if (firstRender) {
+         //await JS.InvokeVoidAsync("pageLoaded");
+         //while (Posts.Count == 0)
+         //   await Task.Delay(100);
+
+         //bool result = await JS.InvokeAsync<bool>("waitForPosts", Posts.Count);
+
+         //if (result)
+            await JS.InvokeVoidAsync("pageFadeIn");
+      }
+
+      await base.OnAfterRenderAsync(firstRender);
+   }
+
+   public async Task PostsLoaded() {
+      await JS.InvokeVoidAsync("postsLoaded");
+   }
+
+   protected override async Task OnInitializedAsync()
+   {
+      var jsonContent = await HttpClient.GetStringAsync("posts/posts.json");
+      Posts = JsonSerializer.Deserialize<List<Models.Post>>(jsonContent);
+   }
+}

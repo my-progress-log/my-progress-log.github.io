@@ -1,0 +1,114 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorWebAssemblyEnableHotReload>true</BlazorWebAssemblyEnableHotReload>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.37.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" PrivateAssets="all" />
+    <PackageReference Include="YamlDotNet" Version="15.1.2" />
+  </ItemGroup>
+
+  <Target Name="TailwindCSS" BeforeTargets="Build">
+    <Exec Command="npx tailwindcss -i wwwroot/css/app.css -o wwwroot/css/app.min.css"/>
+  </Target>
+
+  <UsingTask TaskName="CreatePostsJson" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Input ParameterType="System.String" Required="True" Output="False" />
+      <Output ParameterType="System.String" Output="True" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        StringBuilder jsonBuilder = new StringBuilder("[\n");
+        string[] paths = Input.Split(';');
+
+        foreach (string path in paths) {
+          var content = File.ReadAllText(path);
+
+          var start = content.IndexOf("---") + 3;
+          var newContent = content.Substring(start);
+          var end = newContent.IndexOf("---");
+
+          if (start >= 0)
+          {
+            if (end >= 0)
+            {
+              var frontMatter = content.Substring(start, end + start - 3).Trim();
+
+              jsonBuilder.Append("{");
+
+              // Split the input string by semicolons
+              string[] parts = frontMatter.Split('\n');
+
+              // Add id
+              var lastSlash = path.LastIndexOf(Path.DirectorySeparatorChar);
+              var idWithExtension = path.Substring(lastSlash + 1);
+              var idWithoutExtension = idWithExtension.Remove(idWithExtension.IndexOf(".md"));
+              jsonBuilder.Append($"\"id\":\"{idWithoutExtension}\", ");
+
+              // Add contentStartIndex for reading content quickly
+              var contentStartIndex = (end + 7).ToString();
+              jsonBuilder.Append($"\"contentStartIndex\":{contentStartIndex}, ");
+
+              foreach (string part in parts)
+              {
+                  // Split each part by colon
+                  string[] keyValue = part.Split(':');
+                  // Ensure we have a key-value pair
+                  if (keyValue.Length == 2)
+                  {
+                    
+                      // Remove leading/trailing whitespaces and quotes
+                      string key = keyValue[0].Trim();
+                      string value = keyValue[1].Trim();
+
+                      // Append the key-value pair to the JSON string
+                      jsonBuilder.Append($"\"{key}\":{value}, ");
+                  }
+              }
+
+              // Remove last comma
+              jsonBuilder.Length = jsonBuilder.Length - 2;
+
+              // Close the JSON object
+              jsonBuilder.Append("},\n");
+
+            }
+          }
+          else
+          {
+            Output = string.Empty;
+          }
+        }
+
+        // Remove last comma
+        jsonBuilder.Length = jsonBuilder.Length - 2;
+        jsonBuilder.Append("\n]");
+        
+        // Get the final JSON string
+        string jsonString = jsonBuilder.ToString();
+
+        // Output the JSON string
+        Output = jsonString;
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="CreatePostsJson" AfterTargets="Build">
+    <ItemGroup>
+        <FilePaths Include="wwwroot\posts\*.md" />
+    </ItemGroup>
+
+    <CreatePostsJson Input="@(FilePaths)">
+      <Output PropertyName="JsonContent" TaskParameter="Output" />
+    </CreatePostsJson>
+
+    <WriteLinesToFile File="wwwroot\posts\posts.json" Lines="$(JsonContent)" Overwrite="true" Encoding="UTF-8"/>
+  </Target>
+</Project>

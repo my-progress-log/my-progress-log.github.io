@@ -1,0 +1,159 @@
+@page "/contact"
+@using System.Text.Json
+@using BlazorPortfolio.Models;
+@using System.Globalization
+@using BlazorPortfolio.Components;
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+<PageTitle>Webface™ | Website & Branding Studio in Roermond</PageTitle>
+
+<div class="page w-full relative">
+
+   <div class="pt-[4rem] relative"> 
+
+      <div class="">
+
+         <section class="mb-0 pt-24 pb-12">
+            <h3 class="text-4xl leading-none abc-monument-grotesk tracking-[-0.02em]">
+               Lorem ipsum odor amet, consectetuer adipiscing elit?
+            </h3>
+
+            <div class="mt-6 border-bottom h-[0.666667px] bg-[rgb(23,25,26)] w-full"></div>
+
+            <div class="flex flex-row space-x-3 mt-3">
+               <img class="h-20 w-20 rounded-full" src="media/pf.jpg"/>
+               <div class="flex flex-col h-20 justify-center">
+                  <span>Jordy Schoolmeesters</span>
+                  <span class="underline underline-offset-2 decoration-from-font">hello@vemo.studio</span>
+                  <span class="text-[rgb(145,145,145)]">Founder</span>
+               </div>
+            </div>
+            
+            <p class="mt-6">Mail ons of vul het onderstaande formulier in, dan nemen we z.s.m. contact met je op.</p>
+
+            <EditForm Model="@mailForm" OnValidSubmit="HandleValidSubmit" class="space-y-3 mt-6">
+               <div class="">
+                  <label for="form-fullname" class="block">Voor- en Achternaam*</label>
+                  <input @bind="mailForm.FullName" id="form-fullname" type="text" placeholder="Voornaam Achternaam"/>
+               </div>
+
+               <div class="">
+                  <label for="form-companyname" class="block">Bedrijfsnaam*</label>
+                  <input @bind="mailForm.CompanyName" id="form-companyname" type="email" placeholder="Bedrijfsnaam B.V."/>
+               </div>
+
+               <div class="">
+                  <label for="form-email" class="block">E-mailadres*</label>
+                  <input @bind="mailForm.Email" id="form-email" type="email" placeholder="uw.email@voorbeeld.com"/>
+               </div>
+
+               <div class="">
+                  <label for="form-budget" class="block">Budget*</label>
+                  <select @bind="@mailForm.Budget" id="form-budget" class="@(string.IsNullOrEmpty(mailForm.Budget) ? "text-[rgb(145,145,145)]" : "text-black") p-3 w-full border border-[rgb(145,145,145)] focus:border-black">
+                     <option value="" disabled selected hidden>Selecteer uw budget</option>
+                     <option value="2kless">€2k of minder</option>
+                     <option value="2kto5k">€2k-€5k</option>
+                     <option value="5kto20k">€5k-€20k</option>
+                     <option value="20kplus">€20k of meer</option>
+                     <option value="notsure">Niet zeker</option>
+                  </select>
+               </div>
+
+               <div class="">
+                  <label for="form-message" class="block">Vertel ons hier alvast wat over je project*</label>
+                  <textarea @bind="mailForm.Message" id="form-message" placeholder="Beschrijf uw project in een paar zinnen..." class="min-h-24"/>
+               </div>
+
+               <p class="text-xs text-[rgb(145,145,145)]">Dit formulier is beveiligd d.m.v. reCAPTCHA, het privacybeleid en de gebruiksvoorwaarden van Google zijn daarom van toepassing.</p>
+
+               <button type="submit" class="bg-black text-white py-3 px-6 rounded-full">Verstuur bericht</button>
+            </EditForm>
+
+         </section>
+
+         <section class="dark pt-6 my-0 flex flex-col w-full">
+
+            <h1 class="mb-16 about-first gsap-lines gsap-animate-transition text-4xl tracking-[-0.02em] leading-none">
+               <div class="gsap-line">
+                  <div class="gsap-line-inner abc-monument-grotesk">
+                     Veelgestelde vragen m.b.t. web design en branding
+                  </div>
+               </div>
+            </h1>
+
+            <Accordion Id="faq1" Title="Ik heb interesse, wat kan ik nu het beste doen?" SmallHeader="true">
+               <p>Contact met ons opnemen! Vul het formulier hierboven in of stuur een mail naar <span class="underline underline-offset-2 decoration-from-font">hello@vemo.studio</span> met informatie over jouw project. Dan nemen wij z.s.m. contact met je op om een kennismakingsgesprek in te plannen.</p>
+            </Accordion>
+
+            <Accordion Id="faq2" Title="Wat doen jullie precies?" SmallHeader="true">
+               <p>We ontwikkelen websites en nemen de branding van bedrijven van A-Z uit handen.</p>
+               <p>Meer weten over onze diensten? Klik dan hier!</p>
+            </Accordion>
+
+            <Accordion Id="faq3" Title="Doen jullie zowel websites bouwen als ontwerpen?" SmallHeader="true">
+               <p>Ja! Vrijwel al onze website development projecten gaan gepaard met een branding en indentity traject om zo een samenhangend eindresultaat te creëren. Hierbij staan SEO, performance en responsiviteit centraal.</p>
+               <p>Onder onze website-gerelateerde diensten vallen o.a.:</p>
+               <ul class="pl-5">
+                  <li class="relative before:content-['—'] before:absolute before:-left-5 before:text-black before:dark:text-white">UI/UX ontwerpen</li>
+                  <li class="relative before:content-['—'] before:absolute before:-left-5 before:text-black before:dark:text-white">Front-end development</li>
+                  <li class="relative before:content-['—'] before:absolute before:-left-5 before:text-black before:dark:text-white">CMS implementaties</li>
+               </ul>
+            </Accordion>
+
+            <Accordion Id="faq4" Title="Kan ik zelf mijn nieuwe website aanpassen na de oplevering?" SmallHeader="true">
+               <p>Dat kan zeker! We gebruiken een op maat gemaakt content management systeem (CMS) of Wordpress, waardoor je eenvoudig op elk moment veranderingen aan kan brengen aan de inhoud van de website.</p>
+            </Accordion>
+         </section>
+
+
+         <footer class="dark my-0 pb-6 flex flex-col items-start space-y-12">
+            <div>
+               <div class="gsap-line">
+                  <h2 class="gsap-line-inner text-sm p-0 m-0 mt-6 mb-3 text-[rgb(145,145,145)]">Info</h2>
+               </div>
+
+               <Links/>
+            </div>
+
+            <div class="marquee rotate-12 bottom-24 absolute w-full min-w-full">
+               <div class="marquee-content scroll w-full min-w-full">
+                  <img class="opacity-10 w-full inline-block" src="media/logo_js.svg" alt="Marquee Logo" />
+                  <img class="opacity-10 w-full inline-block" src="media/logo_js.svg" alt="Marquee Logo" />
+                  <img class="opacity-10 w-full inline-block" src="media/logo_js.svg" alt="Marquee Logo" />
+               </div>
+            </div>
+
+            <div class="flex flex-row w-full">
+               <ul class="flex-1 w-1/2 gap-y-0">
+                     <li><a class="tracking-[-0.035em] leading-none">© 2025 Vemo™</a></li>
+               </ul>
+               <ul>
+                  <li><span class="tracking-[-0.035em] leading-none">kvk 12345678</span></li>
+               </ul>
+            </div>
+
+         </footer>
+      </div>
+   </div>
+</div>
+
+@code {
+   private MailForm mailForm = new MailForm();
+   private string budget = "";
+
+   private void HandleValidSubmit()
+   {
+      // check captcha
+      // if good send mail
+   }
+
+   protected override async Task OnAfterRenderAsync(bool firstRender)
+   {
+      if (firstRender) {
+        await JS.InvokeVoidAsync("pageLoaded");
+        await JS.InvokeVoidAsync("pageFadeIn");
+      }
+
+      await base.OnAfterRenderAsync(firstRender);
+   }
+}

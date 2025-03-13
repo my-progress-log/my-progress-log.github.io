@@ -1,0 +1,66 @@
+@using System.Text.RegularExpressions
+<div class="w-full border-t border-black dark:border-white leading-[1.2]">
+    <div class="py-3 flex justify-between items-center cursor-pointer" @onclick="ToggleContent">
+        <h2 class="@(SmallHeader ? "text-lg" : "text-3xl")">@Title</h2>
+        <button class="transition">
+            <span class="text-3xl">@(isExpanded ? "−" : "+")</span>
+        </button>
+    </div>
+    <div id="@id" class="accordion-child-content overflow-hidden @(StartExpanded ? "h-auto" : "h-0")">
+        <div class="py-3 space-y-3">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject]
+    private IJSRuntime JS { get; set; }
+    [Parameter]
+    public string Title { get; set;} = "Undefined";
+    [Parameter]
+    public bool StartExpanded { get; set; } = false;
+    [Parameter]
+    public bool SmallHeader { get; set; } = false;
+    [Parameter]
+    public string? Id { get; set; }
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    private bool isExpanded = false;
+    private string id = string.Empty;
+    protected override void OnParametersSet()
+    {
+        Id ??= Title;
+        id = ToId(Id, "acc");
+        isExpanded = StartExpanded;
+    }
+    public static string ToShortGuid(Guid guid)
+    {
+        string encoded = Convert.ToBase64String(guid.ToByteArray());
+        return encoded.Replace("/", "_").Replace("+", "-").TrimEnd('=');
+    }
+    private void ToggleContent()
+    {
+        isExpanded = !isExpanded;
+
+        if (isExpanded)
+            JS.InvokeVoidAsync("expandAccordion", id);
+        else
+            JS.InvokeVoidAsync("collapseAccordion", id);
+    }
+
+    public static string ToId(string input, string prefix)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return string.Empty;
+
+        // Convert PascalCase or camelCase to kebab-case
+        string kebabCase = Regex.Replace((prefix + "-" + input), "([a-z])([A-Z])", "$1-$2");
+
+        // Convert spaces, underscores, and multiple hyphens to single hyphen
+        kebabCase = Regex.Replace(kebabCase, @"[\s_]+", "-");
+
+        // Convert to lowercase
+        return kebabCase.ToLower();
+    }
+}
