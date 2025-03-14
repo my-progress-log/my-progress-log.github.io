@@ -44,7 +44,7 @@ body {
     margin-right: auto;
 }
 
-html, body, main, .page {
+html, body, main {
     background: var(--theme-bg);
     color: var(--theme-color);
 }
@@ -82,14 +82,16 @@ section.dark, footer.dark {
     background: var(--theme-bg);
 }
 
+/*
 .scrollbar-none::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
 }
 
 .scrollbar-none {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
 }
+    */
 
 .leading-tighter {
     line-height: 1.05;
@@ -431,6 +433,43 @@ html.lenis, html.lenis body {
 
     .eb-trainer-grotesk-book {
         font-family: "EB Trainer Grotesk Book", sans-serif;
+    }
+
+    @font-face {
+        font-family: "EB Trainer Grotesk Book Italic";
+        src: url("../fonts/EBTrainerGroteskTrial-BookItalic.woff2");
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .eb-trainer-grotesk-book-italic {
+        font-family: "EB Trainer Grotesk Book Italic", sans-serif;
+    }
+
+    /* now for AlteHaasGroteskBold.ttf */
+
+    @font-face {
+        font-family: "Alte Haas Grotesk Bold";
+        src: url("../fonts/AlteHaasGroteskBold.ttf");
+        font-weight: 700;
+        font-style: normal;
+    }
+    
+    .alte-haas-grotesk-bold {
+        font-family: "Alte Haas Grotesk Bold", sans-serif;
+    }
+
+    /* now for AlteHaasGroteskRegular.ttf */
+
+    @font-face {
+        font-family: "Alte Haas Grotesk Regular";
+        src: url("../fonts/AlteHaasGroteskRegular.ttf");
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .alte-haas-grotesk-regular {
+        font-family: "Alte Haas Grotesk Regular", sans-serif;
     }
 
 

@@ -5,17 +5,13 @@
 @using Pages
 @inject IJSRuntime JS
 
-<main class="w-full @(!DarkMode ? "dark" : "")">
-
-    <div class="flex flex-row w-full"> @*wrapper*@
-        <nav class="basis-xs">
-            <h1 class="text-5xl tracking-tighter">my-progress-log</h1>
-            <h1 class="text-5xl tracking-tighter">.github.io</h1>
-        </nav>
-        <div class="basis-[calc(100% - 20rem)] content gsap-animate-transition">
-            @Body
-        </div>
-
+<main>
+    <div class="relative w-lvw overflow-y-scroll">
+        @Body
+    </div>
+    <div class="fixed bottom-0 left-0 right-0 w-lvw h-64">
+        @*<img src="media/mpl_logo.svg" class="h-full ml-auto p-4 backdrop-invert" />*@
+        <h1 class="px-4 text-[7.5rem] leading-none text-right tracking-[-0.06em]">my-progress-log<br>.github.io</h1>
     </div>
 </main>
 
