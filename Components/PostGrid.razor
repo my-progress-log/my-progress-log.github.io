@@ -7,7 +7,7 @@
 @using CustomLinkExtension = BlazorPortfolio.Helpers.CustomLinkExtension
 
 
-<div class="p-4 h-auto grid grid-flow-col grid-cols-3 gap-4 grid-auto-rows-auto">
+<div class="p-4 h-auto grid grid-flow-col grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 grid-auto-rows-auto">
 @foreach (var group in _groupedPosts) {
 
     <div>
@@ -37,11 +37,11 @@
     private bool _contentLoaded = false;
     
     Dictionary<int, string> _satisfactionMap = new() {
-        { 1, "Terrible" },
-        { 2, "Unsatisfied" },
-        { 3, "Neutral" },
+        { 1, "Help" },
+        { 2, "Disappointed" },
+        { 3, "Decent" },
         { 4, "Satisfied" },
-        { 5, "Proud" }
+        { 5, "Killed It" }
     };
     
     protected override async Task OnParametersSetAsync()

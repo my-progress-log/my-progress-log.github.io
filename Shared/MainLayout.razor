@@ -6,13 +6,16 @@
 @inject IJSRuntime JS
 
 <main>
-    <div class="relative w-lvw overflow-y-scroll">
+    <div class="relative w-lvw">
         @Body
+        <img src="media/mpl_logo.svg" class="fixed bottom-0 right-0 w-lvw md:w-auto h-auto md:h-64 p-4 mix-blend-exclusion bg-[#fff0]" />
     </div>
-    <div class="fixed bottom-0 left-0 right-0 w-lvw h-64">
-        @*<img src="media/mpl_logo.svg" class="h-full ml-auto p-4 backdrop-invert" />*@
-        <h1 class="px-4 text-[7.5rem] leading-none text-right tracking-[-0.06em]">my-progress-log<br>.github.io</h1>
-    </div>
+    
+        
+        @*
+        <div class=""><h1 class=" mix-blend-difference px-4 text-[7.5rem] leading-none text-right tracking-[-0.06em]">my-progress-log<br>.github.io</h1>
+        </div>*@
+    
 </main>
 
 
